@@ -443,7 +443,7 @@ int TianxiaScript::findZhankaiBtn(Ifire* DM)
 	qDebug() << "zhankaiX=" << result[1].c_str();
 	qDebug() << "zhankaiY=" << result[2].c_str();
 	this->fixNameBug(DM);
-	this->yuandiFuhuoEx(DM);
+	//this->yuandiFuhuoEx(DM);
 	if (authIDCardName(DM) == 1) {
 		Sleep(1000);
 		authIDCardNumber(DM);
@@ -1026,10 +1026,82 @@ int TianxiaScript::yuandiFuhuoPic(Ifire* DM)
 
 		return 1;
 	}
+	return 0;
+}
+
+int TianxiaScript::closeCombatRecordPanel(Ifire* DM)
+{
+	_bstr_t bstr;
+	string str, size;
+	long x, y, l;
 
 
+	std::vector<std::string> result;
+
+	bstr = DM->PskFindPicE(200, 50, 350, 150, "CombatRecord.bmp", "000000", 0.9, 0);
+	str = (_bstr_t)bstr;
+
+	qDebug() << str.c_str();
+
+	result = CommonUtil::split(str, "|");
+
+	l = result.size();
+	size = CommonUtil::Long2STR(l);
+	if (l < 3) {
+		return 0;
+	}
+
+	x = atol(result[1].c_str());
+	y = atol(result[2].c_str());
+
+	qDebug() << "CombatRecordX=" << result[1].c_str();
+	qDebug() << "CombatRecordY=" << result[2].c_str();
+
+	if (x != -1) {
+		DM->PskMToEx(485, 70, 10, 10);
+		DM->PskLClick();
+		Sleep(2000);
+
+		return 1;
+	}
+	return 0;
+}
+
+int TianxiaScript::closeLiuguangBelongingPanel(Ifire* DM)
+{
+	_bstr_t bstr;
+	string str, size;
+	long x, y, l;
 
 
+	std::vector<std::string> result;
+
+	bstr = DM->PskFindPicE(200, 50, 350, 150, "LiuguangBelonging.bmp", "000000", 0.9, 0);
+	str = (_bstr_t)bstr;
+
+	qDebug() << str.c_str();
+
+	result = CommonUtil::split(str, "|");
+
+	l = result.size();
+	size = CommonUtil::Long2STR(l);
+	if (l < 3) {
+		return 0;
+	}
+
+	x = atol(result[1].c_str());
+	y = atol(result[2].c_str());
+
+	qDebug() << "LiuguangBelongingX=" << result[1].c_str();
+	qDebug() << "LiuguangBelongingY=" << result[2].c_str();
+
+	if (x != -1) {
+		DM->PskMToEx(485, 60, 10, 10);
+		DM->PskLClick();
+		Sleep(2000);
+
+		return 1;
+	}
 	return 0;
 }
 
@@ -1065,7 +1137,7 @@ int TianxiaScript::bangdingFuhuo(Ifire* DM)
 	if (x != -1) {
 		DM->PskMToEx(x + 2, y + 2, 10, 10);
 		DM->PskLClick();
-		Sleep(2000);
+		Sleep(1000);
 
 		return 1;
 	}
@@ -6058,6 +6130,84 @@ int TianxiaScript::getLevel(Ifire* DM) {
 	return ret;
 }
 
+int TianxiaScript::checkIsDead(Ifire* DM) {
+	if (getIsDeadNew(DM) == 1) {
+		reload(DM);
+		Sleep(5000);
+		
+	}
+	else {
+		DM->PskKPress(27);
+		Sleep(1000);
+		if (findZhankaiBtn(DM) == 1) {
+			DM->PskMToEx(485, 55, 10, 10);
+			DM->PskLClick();
+			Sleep(1000);
+		}
+		Sleep(2000);
+	
+	}
+	if (this->currentLevel < 40) {
+		yuandiFuhuoPic(DM);
+	}
+
+	bangdingFuhuo(DM);
+	return 0;
+}
+
+int TianxiaScript::getIsDeadNew(Ifire* DM) {
+
+	int ret = 0;
+	if (findLevelLabel(DM) == 0) {
+		DM->PskKPress(67);
+		Sleep(2000);
+	}
+
+	if (findLevelLabel(DM) == 1) {
+		if (findDeathLine(DM) == 1) {
+			ret = 1;
+		}
+		
+	}
+
+	return ret;
+}
+
+int TianxiaScript::findDeathLine(Ifire* DM)
+{
+	_bstr_t bstr;
+	string str, size;
+	long x, y, l;
+
+	std::vector<std::string> result;
+	bstr = DM->PskFindPicE(300, 80, 420, 135, "DeathLine.bmp", "000000", 0.9, 0);
+	str = (_bstr_t)bstr;
+
+	qDebug() << str.c_str();
+
+	result = CommonUtil::split(str, "|");
+
+	l = result.size();
+	size = CommonUtil::Long2STR(l);
+	if (l < 3) {
+		return 0;
+	}
+
+	x = atol(result[1].c_str());
+	y = atol(result[2].c_str());
+
+	qDebug() << "DeathLineX=" << result[1].c_str();
+	qDebug() << "DeathLineY=" << result[2].c_str();
+
+	if (x != -1) {
+		Sleep(1000);
+		return 1;
+	}
+
+	return 0;
+}
+
+
 int TianxiaScript::getCurrentHuoyue(Ifire* DM)
 {
 	_bstr_t bstr;
@@ -9399,7 +9549,7 @@ int TianxiaScript::mapClose(Ifire* DM)
 	if (x != -1) {
 		DM->PskMToEx(x + 2, y + 2, 10, 10);
 		DM->PskLClick();
-		Sleep(2000);
+		Sleep(1000);
 
 		return 1;
 	}
@@ -12581,7 +12731,7 @@ int TianxiaScript::yunshiScript(Ifire* DM, long pX, long pY)
 		Sleep(2000);
 	}
 
-	if (findZhankaiBtn(DM) == 1 || findYunshiCloseBtn(DM) == 1) {
+	if (findZhankaiBtn(DM) == 1 || findYunshiCloseBtn(DM) == 1 || bangdingFuhuo(DM)) {
 		DM->PskMTo(pX, pY);
 		DM->PskLClick();
 		Sleep(3000);
@@ -24471,7 +24621,8 @@ unsigned __stdcall TianxiaScript::ThreadFun(void * pParam) {
 			script.lvrenBaoxiangClose(DM);
 			script.newsClose(DM);
 			script.ShizhuangCloseBtnClose(DM);
-
+			script.closeCombatRecordPanel(DM);
+			script.closeLiuguangBelongingPanel(DM);
 
 			if (script.authIDCardName(DM) == 1) {
 				Sleep(1000);
@@ -24500,7 +24651,9 @@ unsigned __stdcall TianxiaScript::ThreadFun(void * pParam) {
 			script.getWindowIsExist(DM);
 			//script.kaMijing(DM);
 			//script.querenQiangzhi(DM);
-			script.yuandiFuhuoEx(DM);
+			//script.yuandiFuhuoEx(DM);
+			script.checkIsDead(DM);
+
 			script.quxiaoClose(DM);
 			//script.zhaoShifu(DM);
 			script.closeUpdate(DM);

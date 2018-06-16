@@ -816,6 +816,12 @@ public:
 
 	int TianxiaScript::IsInTianlao(Ifire* DM);
 	int TianxiaScript::findTianyuanMap(Ifire* DM);
+
+	int TianxiaScript::getIsDeadNew(Ifire* DM);
+	int TianxiaScript::findDeathLine(Ifire* DM);
+	int TianxiaScript::checkIsDead(Ifire* DM);
+	int TianxiaScript::closeCombatRecordPanel(Ifire* DM);
+	int TianxiaScript::closeLiuguangBelongingPanel(Ifire* DM);
 };
 
 
