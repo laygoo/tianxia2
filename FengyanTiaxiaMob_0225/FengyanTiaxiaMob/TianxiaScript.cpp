@@ -6136,7 +6136,7 @@ int TianxiaScript::checkIsDead(Ifire* DM) {
 		Sleep(5000);
 		
 	}
-	else {
+	/*else {
 		DM->PskKPress(27);
 		Sleep(1000);
 		if (findZhankaiBtn(DM) == 1) {
@@ -6146,7 +6146,7 @@ int TianxiaScript::checkIsDead(Ifire* DM) {
 		}
 		Sleep(2000);
 	
-	}
+	}*/
 	if (this->currentLevel < 40) {
 		yuandiFuhuoPic(DM);
 	}
