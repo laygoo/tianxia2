@@ -822,6 +822,8 @@ public:
 	int TianxiaScript::checkIsDead(Ifire* DM);
 	int TianxiaScript::closeCombatRecordPanel(Ifire* DM);
 	int TianxiaScript::closeLiuguangBelongingPanel(Ifire* DM);
+
+	int TianxiaScript::clickJieriCloseBtn(Ifire* DM);
 };
 
 

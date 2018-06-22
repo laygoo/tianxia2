@@ -1785,6 +1785,43 @@ int TianxiaScript::clickYunshiCloseBtn(Ifire* DM)
 	return 0;
 }
 
+int TianxiaScript::clickJieriCloseBtn(Ifire* DM)
+{
+	_bstr_t bstr;
+	string str, size;
+	long x, y, l;
+
+
+	std::vector<std::string> result;
+	bstr = DM->PskFindPicE(450, 20, 600, 200, "JieriCloseBtn.bmp", "000000", 0.9, 0);
+	str = (_bstr_t)bstr;
+
+	qDebug() << str.c_str();
+
+	result = CommonUtil::split(str, "|");
+
+	l = result.size();
+	size = CommonUtil::Long2STR(l);
+	if (l < 3) {
+		return 0;
+	}
+
+	x = atol(result[1].c_str());
+	y = atol(result[2].c_str());
+
+	qDebug() << "JieriCloseBtnX=" << result[1].c_str();
+	qDebug() << "JieriCloseBtnY=" << result[2].c_str();
+
+	if (x != -1) {
+		DM->PskMToEx(x + 2, y + 2, 10, 10);
+		DM->PskLClick();
+		Sleep(1000);
+		return 1;
+	}
+
+	return 0;
+}
+
 int TianxiaScript::clickFuyunCloseBtn(Ifire* DM)
 {
 	_bstr_t bstr;
@@ -13187,6 +13224,7 @@ int TianxiaScript::changguiTask(Ifire* DM)
 	tudibaoMing(DM);
 	closeWeishiWnd(DM);
 	closeCreateForcePanel(DM);
+	clickJieriCloseBtn(DM);
 
 	if (findWanshengClose(DM) == 1) {
 		DM->PskMTo(580, 10);
@@ -13447,7 +13485,7 @@ int TianxiaScript::changguiTask(Ifire* DM)
 			clickYunsAllPoint(DM);
 			scriptIndex++;
 			clickYunshiCloseBtn(DM);
-
+			clickJieriCloseBtn(DM);
 			return 1;
 		}
 		else {
@@ -24800,6 +24838,7 @@ unsigned __stdcall TianxiaScript::ThreadFun(void * pParam) {
 				int temp = 0;
 				while (script.findDengluBtn(DM) == 0 && script.findZhankaiBtn(DM) == 0 && script.findScanPic(DM) == 0 && script.getIsEnded() == false) {
 					Sleep(3000);
+					script.bangdingFuhuo(DM);
 					temp++;
 					if (temp > 30) {
 						break;
